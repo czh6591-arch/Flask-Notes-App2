@@ -1,0 +1,47 @@
+.note-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.note-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 0 0 30%;
+  min-width: 150px;
+}
+
+.note-title {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.note-content-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.note-content {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.note-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.note-actions .btn {
+  margin-right: 10px;
+}

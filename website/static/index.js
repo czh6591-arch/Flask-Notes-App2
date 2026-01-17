@@ -6,3 +6,9 @@ function DeleteNote(noteid){
     window.location.href = "/";
   });
 }
+
+function loadNote(noteId, noteTitle, noteData) {
+  document.getElementById('noteId').value = noteId;
+  document.getElementById('noteTitle').value = noteTitle;
+  document.getElementById('note').value = noteData;
+}

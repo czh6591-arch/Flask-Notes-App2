@@ -25,6 +25,15 @@ def create_app():
     # Create all database tables if they don't already exist
     with app.app_context():
         db.create_all()
+        
+        # Add title column if it doesn't exist (for existing databases)
+        from sqlalchemy import text
+        try:
+            db.session.execute(text("ALTER TABLE note ADD COLUMN title VARCHAR(100)"))
+            db.session.commit()
+        except Exception as e:
+            # Column already exists
+            pass
 
     # Set up Flask-Login for managing user sessions
     login_manager = LoginManager()

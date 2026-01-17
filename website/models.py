@@ -6,6 +6,7 @@ from . import db  # Import the database object from the __init__.py file
 # Define the Note model to represent user-created notes
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
     data = db.Column(db.String(500))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     # Foreign key to associate the note with a specific user

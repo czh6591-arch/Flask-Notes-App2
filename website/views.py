@@ -36,3 +36,24 @@ def delete_note():
             db.session.delete(note)
             db.session.commit()
     return jsonify({})
+
+@views.route('/delete-notes', methods=['POST'])
+def delete_notes():
+    data = json.loads(request.data)
+    noteids = data.get('noteids', [])
+    delete_all = data.get('deleteAll', False)
+    
+    if delete_all:
+        # 删除全部笔记
+        notes = Note.query.filter_by(user_id=current_user.id).all()
+        for note in notes:
+            db.session.delete(note)
+    else:
+        # 删除选中的笔记
+        for noteid in noteids:
+            note = Note.query.get(noteid)
+            if note and note.user_id == current_user.id:
+                db.session.delete(note)
+    
+    db.session.commit()
+    return jsonify({})

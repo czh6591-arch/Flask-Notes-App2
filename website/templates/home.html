@@ -3,21 +3,91 @@
 {% block title %}Home{% endblock %} 
 
 {% block content %}
-<h1 align="center">Notes</h1>
-<ul class="list-group list-group-flush" id="notes">
-  {% for note in user.notes %}
-  <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
-  </li>
-  {% endfor %}
-</ul>
-<form method="POST">
-  <textarea name="note" id="note" class="form-control"></textarea>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Add Note</button>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 align="center">Notes</h1>
+      
+      <div class="mb-3" align="center">
+        <button id="exportBtn" class="btn btn-success">导出全部笔记</button>
+      </div>
+      
+      <ul class="list-group list-group-flush" id="notes">
+        {% for note in user.notes %}
+        <li class="list-group-item note-item" data-note-id="{{ note.id }}">
+          <div class="note-header">
+            <h5 class="note-title">{{ note.title }}</h5>
+            <div class="note-actions">
+              <button class="btn btn-sm btn-outline-primary edit-btn" data-note-id="{{ note.id }}">编辑</button>
+              <button class="btn btn-sm btn-outline-danger delete-btn" onclick="DeleteNote({{ note.id }})">删除</button>
+            </div>
+          </div>
+          <div class="note-content">
+            {{ note.data }}
+          </div>
+          
+          <!-- Hidden edit form -->
+          <div class="edit-form" style="display: none;">
+            <div class="form-group">
+              <input type="text" class="form-control edit-title" value="{{ note.title }}" placeholder="笔记标题">
+            </div>
+            <div class="form-group">
+              <textarea class="form-control edit-content" rows="3">{{ note.data }}</textarea>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-sm btn-success save-btn" data-note-id="{{ note.id }}">保存</button>
+              <button class="btn btn-sm btn-secondary cancel-btn">取消</button>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      
+      <div class="mt-4">
+        <h3 align="center">添加新笔记</h3>
+        <form method="POST">
+          <div class="form-group">
+            <input type="text" name="title" class="form-control" placeholder="笔记标题（可选）">
+          </div>
+          <div class="form-group">
+            <textarea name="note" id="note" class="form-control" placeholder="笔记内容"></textarea>
+          </div>
+          <div align="center">
+            <button type="submit" class="btn btn-primary">添加笔记</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-</form>
+</div>
+
+<style>
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.note-title {
+  margin: 0;
+  color: #343a40;
+}
+
+.note-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.note-content {
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
+
+.edit-form {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #dee2e6;
+}
+</style>
 {% endblock %}

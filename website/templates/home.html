@@ -1,19 +1,49 @@
 {% extends 'base.html' %}
-<!-- Extends the base template to reuse its structure and styling -->
 {% block title %}Home{% endblock %} 
 
 {% block content %}
 <h1 align="center">Notes</h1>
+<div align="right" style="margin-bottom: 15px;">
+  <button type="button" class="btn btn-success" onclick="exportNotes()">导出全部笔记</button>
+</div>
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
-  <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
+  <li class="list-group-item note-item" data-note-id="{{ note.id }}">
+    <div class="note-content" id="note-content-{{ note.id }}">
+      <div class="note-row">
+        <div class="note-title-col">
+          <strong>{{ note.title if note.title else '无标题' }}</strong>
+        </div>
+        <div class="note-body-col">
+          {{ note.data }}
+        </div>
+        <div class="note-actions-col">
+          <button type="button" class="btn btn-sm btn-outline-primary" onclick="editNote({{ note.id }})">编辑</button>
+          <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="note-edit" id="note-edit-{{ note.id }}" style="display: none;">
+      <div class="form-group">
+        <label>标题</label>
+        <input type="text" class="form-control" id="edit-title-{{ note.id }}" placeholder="笔记标题" value="{{ note.title }}">
+      </div>
+      <div class="form-group">
+        <label>正文</label>
+        <textarea class="form-control" id="edit-data-{{ note.id }}" rows="3">{{ note.data }}</textarea>
+      </div>
+      <button type="button" class="btn btn-sm btn-primary" onclick="saveNote({{ note.id }})">保存</button>
+      <button type="button" class="btn btn-sm btn-secondary" onclick="cancelEdit({{ note.id }})">取消</button>
+    </div>
   </li>
   {% endfor %}
 </ul>
 <form method="POST">
+  <div class="form-group">
+    <input type="text" name="title" id="title" class="form-control" placeholder="笔记标题（可选）">
+  </div>
   <textarea name="note" id="note" class="form-control"></textarea>
   <br />
   <div align="center">

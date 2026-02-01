@@ -7,9 +7,7 @@
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
   <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
+    <input type="checkbox" class="note-checkbox" value="{{ note.id }}"> {{ note.data }}
   </li>
   {% endfor %}
 </ul>
@@ -18,6 +16,7 @@
   <br />
   <div align="center">
     <button type="submit" class="btn btn-primary">Add Note</button>
+    <button type="button" class="btn btn-danger" onclick="DeleteSelectedNotes()">Delete</button>
   </div>
 </form>
 {% endblock %}

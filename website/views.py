@@ -36,3 +36,27 @@ def delete_note():
             db.session.delete(note)
             db.session.commit()
     return jsonify({})
+
+
+@views.route('/delete-notes', methods=['POST'])
+@login_required
+def delete_notes():
+    data = json.loads(request.data)
+    noteids = data.get('noteids', [])
+    deleteAll = data.get('deleteAll', False)
+    
+    if deleteAll:
+        # Delete all notes for current user
+        notes = Note.query.filter_by(user_id=current_user.id).all()
+        for note in notes:
+            db.session.delete(note)
+    else:
+        # Delete selected notes
+        for noteid in noteids:
+            note = Note.query.get(noteid)
+            if note:
+                if note.user_id == current_user.id:
+                    db.session.delete(note)
+    
+    db.session.commit()
+    return jsonify({})

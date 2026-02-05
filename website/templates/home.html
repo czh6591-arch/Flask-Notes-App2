@@ -4,17 +4,43 @@
 
 {% block content %}
 <h1 align="center">Notes</h1>
+
+<div align="right" class="mb-3">
+  <button type="button" class="btn btn-success" onclick="ExportNotes()">导出全部笔记</button>
+</div>
+
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
-  <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
+  <li class="list-group-item" id="note-{{ note.id }}">
+    <div class="note-display" id="note-display-{{ note.id }}" style="display: flex; align-items: flex-start;">
+      <strong class="note-title" style="min-width: 120px; margin-right: 15px; flex-shrink: 0;">{{ note.title }}</strong>
+      <div style="flex-grow: 1;">
+        <p class="note-content" style="margin-bottom: 5px;">{{ note.data }}</p>
+        <button type="button" class="btn btn-sm btn-primary" onclick="EditNote({{ note.id }})">编辑</button>
+      </div>
+      <button type="button" class="close" onclick="DeleteNote({{ note.id }})" style="margin-left: 10px;">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="note-edit" id="note-edit-{{ note.id }}" style="display: none;">
+      <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
+        <input type="text" class="form-control" id="edit-title-{{ note.id }}" value="{{ note.title }}" placeholder="笔记标题" style="min-width: 120px; margin-right: 15px; flex-shrink: 0;">
+        <textarea class="form-control" id="edit-content-{{ note.id }}" rows="3" style="flex-grow: 1;">{{ note.data }}</textarea>
+      </div>
+      <div>
+        <button type="button" class="btn btn-sm btn-success" onclick="SaveNote({{ note.id }})">保存</button>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="CancelEdit({{ note.id }})" style="margin-left: 10px;">取消</button>
+      </div>
+    </div>
   </li>
   {% endfor %}
 </ul>
-<form method="POST">
-  <textarea name="note" id="note" class="form-control"></textarea>
+
+<form method="POST" class="mt-4">
+  <div class="form-group">
+    <input type="text" name="title" id="title" class="form-control" placeholder="笔记标题（可选）">
+  </div>
+  <textarea name="note" id="note" class="form-control" placeholder="输入笔记内容..."></textarea>
   <br />
   <div align="center">
     <button type="submit" class="btn btn-primary">Add Note</button>

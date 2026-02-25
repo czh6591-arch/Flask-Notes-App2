@@ -1,23 +1,82 @@
 {% extends 'base.html' %}
-<!-- Extends the base template to reuse its structure and styling -->
 {% block title %}Home{% endblock %} 
 
 {% block content %}
 <h1 align="center">Notes</h1>
+
+<div align="center" style="margin-bottom: 20px;">
+  <a href="/export-notes" class="btn btn-success">导出全部笔记</a>
+</div>
+
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
-  <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
+  <li class="list-group-item note-item" data-note-id="{{ note.id }}">
+    <div class="note-container">
+      <div class="note-title-section">
+        <input type="text" class="note-title-input form-control" value="{{ note.title }}" placeholder="笔记标题">
+      </div>
+      <div class="note-content-section">
+        <textarea class="note-content-input form-control">{{ note.data }}</textarea>
+        <div class="note-actions">
+          <button type="button" class="btn btn-primary btn-sm save-btn" onclick="SaveNote({{ note.id }})">保存</button>
+          <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </li>
   {% endfor %}
 </ul>
+
 <form method="POST">
-  <textarea name="note" id="note" class="form-control"></textarea>
+  <div class="form-group">
+    <input type="text" name="title" id="title" class="form-control" placeholder="笔记标题">
+  </div>
+  <textarea name="note" id="note" class="form-control" placeholder="笔记内容"></textarea>
   <br />
   <div align="center">
     <button type="submit" class="btn btn-primary">Add Note</button>
   </div>
 </form>
+
+<style>
+.note-item {
+  padding: 15px;
+}
+.note-container {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+.note-title-section {
+  min-width: 150px;
+  max-width: 200px;
+}
+.note-content-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.note-title-input {
+  font-weight: bold;
+}
+.note-content-input {
+  min-height: 80px;
+  resize: vertical;
+}
+.note-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.close {
+  margin-left: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+</style>
 {% endblock %}

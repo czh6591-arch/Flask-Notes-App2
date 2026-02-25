@@ -1,19 +1,39 @@
 {% extends 'base.html' %}
-<!-- Extends the base template to reuse its structure and styling -->
 {% block title %}Home{% endblock %} 
 
 {% block content %}
 <h1 align="center">Notes</h1>
+<div align="center" style="margin-bottom: 15px;">
+  <button type="button" class="btn btn-success" onclick="exportNotes()">导出全部笔记</button>
+</div>
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
-  <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
+  <li class="list-group-item note-item" data-note-id="{{ note.id }}">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="note-title-view" id="title-view-{{ note.id }}">{{ note.title }}</span>
+        <input type="text" class="form-control note-title-edit d-none" id="title-input-{{ note.id }}" value="{{ note.title }}">
+      </div>
+      <div class="col-md-8">
+        <span class="note-content-view" id="content-view-{{ note.id }}">{{ note.data }}</span>
+        <textarea class="form-control note-content-edit d-none" id="content-input-{{ note.id }}">{{ note.data }}</textarea>
+      </div>
+      <div class="col-md-1 text-right">
+        <button type="button" class="btn btn-sm btn-outline-primary edit-btn" id="edit-btn-{{ note.id }}" onclick="toggleEdit({{ note.id }})">编辑</button>
+        <button type="button" class="btn btn-sm btn-outline-success save-btn d-none" id="save-btn-{{ note.id }}" onclick="saveNote({{ note.id }})">保存</button>
+        <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
   </li>
   {% endfor %}
 </ul>
 <form method="POST">
+  <div class="form-group">
+    <label for="title">笔记标题</label>
+    <input type="text" name="title" id="title" class="form-control" placeholder="请输入笔记标题">
+  </div>
   <textarea name="note" id="note" class="form-control"></textarea>
   <br />
   <div align="center">

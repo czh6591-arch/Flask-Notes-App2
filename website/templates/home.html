@@ -7,14 +7,19 @@
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes %}
   <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
+    <div class="mb-2">
+      <input type="text" id="note-title-{{ note.id }}" class="form-control" value="{{ note.title or 'Untitled' }}" onblur="UpdateNote({{ note.id }}, this.value, document.getElementById('note-content-{{ note.id }}').value)">
+    </div>
+    <textarea id="note-content-{{ note.id }}" class="form-control" onblur="UpdateNote({{ note.id }}, document.getElementById('note-title-{{ note.id }}').value, this.value)">{{ note.data }}</textarea>
+    <button type="button" class="close mt-2" onclick="DeleteNote({{ note.id }})">
       <span aria-hidden="true">&times;</span>
+    </button>
   </li>
   {% endfor %}
 </ul>
 <form method="POST">
-  <textarea name="note" id="note" class="form-control"></textarea>
+  <input type="text" name="title" id="title" class="form-control mb-2" placeholder="Note Title">
+  <textarea name="note" id="note" class="form-control" placeholder="Note Content"></textarea>
   <br />
   <div align="center">
     <button type="submit" class="btn btn-primary">Add Note</button>

@@ -13,12 +13,13 @@ views = Blueprint('views', __name__)
 # defines a function that returns HTML content
 def home():
     if request.method == 'POST':
+        title = request.form.get('title')
         note = request.form.get('note')
 
         if len(note) < 1:
             flash('Note is too short', category='error')
         else:
-            new_note = Note(data=note, user_id=current_user.id)
+            new_note = Note(title=title, data=note, user_id=current_user.id)
             db.session.add(new_note)
             db.session.commit()
             flash('Note added!', category='success')
@@ -34,5 +35,20 @@ def delete_note():
     if note:
         if note.user_id == current_user.id:
             db.session.delete(note)
+            db.session.commit()
+    return jsonify({})
+
+
+@views.route('/update-note', methods=['POST'])
+def update_note():
+    note_data = json.loads(request.data)
+    note_id = note_data['note_id']
+    title = note_data['title']
+    data = note_data['data']
+    note = Note.query.get(note_id)
+    if note:
+        if note.user_id == current_user.id:
+            note.title = title
+            note.data = data
             db.session.commit()
     return jsonify({})

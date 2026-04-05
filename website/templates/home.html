@@ -5,16 +5,23 @@
 {% block content %}
 <h1 align="center">Notes</h1>
 <ul class="list-group list-group-flush" id="notes">
-  {% for note in user.notes %}
+  {% for note in notes %}
   <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
+    <div class="note-header">
+      <input type="text" class="note-title" value="{{ note.title or '无标题' }}" onblur="UpdateNote({{ note.id }}, this.value, this.nextElementSibling.value)" />
+      <span class="note-date">{{ note.date.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+      <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <textarea class="note-content" onblur="UpdateNote({{ note.id }}, this.previousElementSibling.previousElementSibling.value, this.value)">{{ note.data }}</textarea>
   </li>
   {% endfor %}
 </ul>
 <form method="POST">
-  <textarea name="note" id="note" class="form-control"></textarea>
+  <input type="text" name="title" id="title" class="form-control" placeholder="笔记标题" />
+  <br />
+  <textarea name="note" id="note" class="form-control" placeholder="笔记内容"></textarea>
   <br />
   <div align="center">
     <button type="submit" class="btn btn-primary">Add Note</button>

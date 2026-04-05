@@ -1,0 +1,46 @@
+.note-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.note-title {
+  flex: 1;
+  border: none;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 5px;
+  background: transparent;
+  outline: none;
+}
+
+.note-date {
+  margin: 0 10px;
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.note-content {
+  width: 100%;
+  border: none;
+  resize: none;
+  background: transparent;
+  outline: none;
+  min-height: 100px;
+}
+
+.list-group-item {
+  position: relative;
+  padding: 15px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  opacity: 0.5;
+}
+
+.close:hover {
+  opacity: 1;
+}

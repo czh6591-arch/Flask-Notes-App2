@@ -5,35 +5,48 @@
 {% block content %}
 <h1 align="center">Notes</h1>
 <ul class="list-group list-group-flush" id="notes">
-  {% for note in user.notes %}
+  {% for note in notes %}
   <li class="list-group-item">
     <div class="note-item" data-note-id="{{ note.id }}">
       <div class="note-header">
-        <strong class="note-title">{{ note.title }}</strong>
-        <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <input type="text" class="note-title form-control" value="{{ note.title }}" onchange="UpdateNote({{ note.id }})">
+        <span class="note-date text-muted">{{ note.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
       </div>
-      <div class="note-content">{{ note.data }}</div>
-      <div class="note-actions mt-2">
-        <button type="button" class="btn btn-sm btn-secondary" onclick="EditNote({{ note.id }})">Edit</button>
-      </div>
+      <textarea class="note-content form-control" onchange="UpdateNote({{ note.id }})">{{ note.data }}</textarea>
     </div>
+    <button type="button" class="close" onclick="DeleteNote({{ note.id }})">
+      <span aria-hidden="true">&times;</span>
   </li>
   {% endfor %}
 </ul>
 <form method="POST">
-  <div class="form-group">
-    <label for="title">Title</label>
-    <input type="text" name="title" id="title" class="form-control" placeholder="Enter note title">
-  </div>
-  <div class="form-group mt-3">
-    <label for="note">Content</label>
-    <textarea name="note" id="note" class="form-control" rows="5" placeholder="Enter note content"></textarea>
-  </div>
+  <input type="text" name="note_title" id="note_title" class="form-control" placeholder="Note Title">
+  <br />
+  <textarea name="note" id="note" class="form-control" placeholder="Note Content"></textarea>
   <br />
   <div align="center">
     <button type="submit" class="btn btn-primary">Add Note</button>
   </div>
 </form>
+<style>
+  .note-item {
+    margin-bottom: 10px;
+  }
+  .note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .note-title {
+    flex: 1;
+    margin-right: 10px;
+  }
+  .note-content {
+    width: 100%;
+  }
+  .note-date {
+    font-size: 0.85em;
+  }
+</style>
 {% endblock %}

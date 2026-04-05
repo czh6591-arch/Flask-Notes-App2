@@ -8,7 +8,7 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     data = db.Column(db.String(500))
-    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     # Foreign key to associate the note with a specific user
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 

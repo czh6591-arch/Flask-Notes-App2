@@ -7,11 +7,11 @@ function DeleteNote(noteid){
   });
 }
 
-function UpdateNote(noteId, title, data){
+function UpdateNote(noteid, title, data){
   fetch("/update-note", {
     method: "POST",
-    body: JSON.stringify({ note_id: noteId, title: title, data: data }),
+    body: JSON.stringify({ noteid: noteid, title: title, data: data }),
   }).then((_res) => {
-    window.location.href = "/";
+    // 不需要刷新页面，因为我们已经实时更新了UI
   });
 }

@@ -24,7 +24,9 @@ def home():
             db.session.commit()
             flash('Note added!', category='success')
 
-    return render_template("home.html", user=current_user)
+    # Get notes ordered by date in descending order
+    notes = Note.query.filter_by(user_id=current_user.id).order_by(Note.date.desc()).all()
+    return render_template("home.html", user=current_user, notes=notes)
 
 
 @views.route('/delete-note', methods=['POST'])
@@ -41,11 +43,11 @@ def delete_note():
 
 @views.route('/update-note', methods=['POST'])
 def update_note():
-    note_data = json.loads(request.data)
-    note_id = note_data['note_id']
-    title = note_data['title']
-    data = note_data['data']
-    note = Note.query.get(note_id)
+    note = json.loads(request.data)
+    noteid = note['noteid']
+    title = note['title']
+    data = note['data']
+    note = Note.query.get(noteid)
     if note:
         if note.user_id == current_user.id:
             note.title = title

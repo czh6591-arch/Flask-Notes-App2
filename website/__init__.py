@@ -2,9 +2,24 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
+from sqlalchemy import inspect, text
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
+
+
+def add_missing_columns(app):
+    with app.app_context():
+        inspector = inspect(db.engine)
+        columns = [col['name'] for col in inspector.get_columns('note')]
+        
+        if 'title' not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(text("ALTER TABLE note ADD COLUMN title VARCHAR(100) DEFAULT ''"))
+                print('Added title column to note table')
+            except Exception as e:
+                print(f'Error adding title column: {e}')
 
 
 def create_app():
@@ -13,25 +28,23 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
 
-    # Import and register Blueprints for modular route management
-    from .views import views  # Routes for general views
-    from .auth import auth  # Routes for authentication
+    from .views import views
+    from .auth import auth
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
     from .models import User, Note # noqa
     
-    # Create all database tables if they don't already exist
     with app.app_context():
         db.create_all()
+    
+    add_missing_columns(app)
 
-    # Set up Flask-Login for managing user sessions
     login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'  # Redirect unauth users to the login page
-    login_manager.init_app(app)  # Bind the login manager to the Flask app
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
 
-    # Define a callback to load the current user by their ID
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))

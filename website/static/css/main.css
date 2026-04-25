@@ -20,6 +20,8 @@
   margin-bottom: 8px;
   border-bottom: 2px solid #3498db;
   padding-bottom: 5px;
+  white-space: pre-wrap;
+  min-height: 1.5rem;
 }
 
 .note-content {

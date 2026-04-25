@@ -20,10 +20,10 @@ function StartEdit(noteid) {
   const titleInput = noteEl.querySelector('.note-title-input');
   const contentInput = noteEl.querySelector('.note-content-input');
   
-  const currentTitle = noteEl.querySelector('.note-title').textContent.trim();
-  const currentContent = noteEl.querySelector('.note-content').textContent.trim();
+  const currentTitle = noteEl.querySelector('.note-title').getAttribute('data-original-title') || '';
+  const currentContent = noteEl.querySelector('.note-content').getAttribute('data-original-content') || '';
   
-  titleInput.value = currentTitle === '无标题' ? '' : currentTitle;
+  titleInput.value = currentTitle;
   contentInput.value = currentContent;
   
   noteView.style.display = 'none';
@@ -50,10 +50,10 @@ function SaveNote(noteid) {
   const titleInput = noteEl.querySelector('.note-title-input');
   const contentInput = noteEl.querySelector('.note-content-input');
   
-  const newTitle = titleInput.value.trim();
-  const newContent = contentInput.value.trim();
+  const newTitle = titleInput.value;
+  const newContent = contentInput.value;
   
-  if (newContent.length < 1) {
+  if (newContent.trim().length < 1) {
     alert('笔记内容不能为空');
     return;
   }
@@ -74,8 +74,11 @@ function SaveNote(noteid) {
         const noteTitle = noteEl.querySelector('.note-title');
         const noteContent = noteEl.querySelector('.note-content');
         
-        noteTitle.textContent = newTitle || '无标题';
+        noteTitle.textContent = newTitle;
         noteContent.textContent = newContent;
+        
+        noteTitle.setAttribute('data-original-title', newTitle);
+        noteContent.setAttribute('data-original-content', newContent);
         
         CancelEdit(noteid);
       } else {

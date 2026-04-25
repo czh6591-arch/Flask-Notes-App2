@@ -49,8 +49,7 @@ def export_notes():
     
     output = []
     for note in notes:
-        title = note.title if note.title else "无标题"
-        output.append(f"{title}")
+        output.append(f"{note.title}")
         output.append(f"- {note.data}")
         output.append("")
     

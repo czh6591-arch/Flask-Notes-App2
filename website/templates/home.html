@@ -12,10 +12,10 @@
   {% for note in user.notes %}
   <li class="list-group-item note-item" data-note-id="{{ note.id }}">
     <div class="note-view">
-      <div class="note-title">
-        {{ note.title if note.title else '无标题' }}
+      <div class="note-title" data-original-title="{{ note.title }}">
+        {{ note.title }}
       </div>
-      <div class="note-content">
+      <div class="note-content" data-original-content="{{ note.data }}">
         {{ note.data }}
       </div>
       <div class="note-actions">
